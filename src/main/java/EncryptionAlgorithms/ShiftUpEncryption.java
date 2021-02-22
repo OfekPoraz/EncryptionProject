@@ -1,6 +1,7 @@
 package EncryptionAlgorithms;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 public class ShiftUpEncryption extends EncryptionAlgorithm{
 
@@ -9,7 +10,7 @@ public class ShiftUpEncryption extends EncryptionAlgorithm{
     }
 
     @Override
-    public String encryptFile(String stringToEncrypt, int encryptionKey) throws IOException {
+    public String encryptFile(String stringToEncrypt, int encryptionKey) throws IOException, NoSuchElementException, ClassCastException {
         StringBuffer encryptedData = new StringBuffer();
         for (int i = 0 ; i < stringToEncrypt.length() ; i ++){
             if (checkIfAlphabet(stringToEncrypt.charAt(i), false)){
@@ -30,7 +31,7 @@ public class ShiftUpEncryption extends EncryptionAlgorithm{
     }
 
     @Override
-    public String decryptFile(String stringToEncrypt, int decryptionKey) throws IOException {
+    public String decryptFile(String stringToEncrypt, int decryptionKey) throws IOException, NoSuchElementException, ClassCastException {
         StringBuffer encryptedData = new StringBuffer();
         for (int i = 0 ; i < stringToEncrypt.length() ; i ++){
             if (checkIfAlphabet(stringToEncrypt.charAt(i), false)){

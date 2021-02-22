@@ -1,6 +1,7 @@
 package EncryptionAlgorithms;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 public class RepeatEncryption extends EncryptionAlgorithm{
 
@@ -13,7 +14,7 @@ public class RepeatEncryption extends EncryptionAlgorithm{
     }
 
     @Override
-    public String encryptFile(String stringToEncrypt, int encryptionKey) throws IOException {
+    public String encryptFile(String stringToEncrypt, int encryptionKey) throws IOException, NoSuchElementException, ClassCastException {
         for (int i = 0 ; i < numberOfTimesToEncrypt ; i++){
             stringToEncrypt = algorithm.encryptFile(stringToEncrypt, encryptionKey);
         }
@@ -21,7 +22,7 @@ public class RepeatEncryption extends EncryptionAlgorithm{
     }
 
     @Override
-    public String decryptFile(String stringToDecrypt, int decryptionKey) throws IOException {
+    public String decryptFile(String stringToDecrypt, int decryptionKey) throws IOException, NoSuchElementException, ClassCastException {
         for (int i = 0 ; i < numberOfTimesToEncrypt ; i++){
             stringToDecrypt = algorithm.decryptFile(stringToDecrypt, decryptionKey);
         }

@@ -5,7 +5,7 @@ import java.security.SecureRandom;
 public class Key {
     private int key;
 
-    public Key(String nameOfEncryption) {
+    public Key() {
         SecureRandom secureRandomNumber = new SecureRandom();
         while (true) {
             int number = secureRandomNumber.nextInt(26);
