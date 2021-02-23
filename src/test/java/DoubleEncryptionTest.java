@@ -1,11 +1,13 @@
 import EncryptionAlgorithms.DoubleEncryption;
 import EncryptionAlgorithms.ShiftMultiplyEncryption;
 import EncryptionAlgorithms.ShiftUpEncryption;
+import EventsLogger.EncryptionLogger;
 import FileEncryptor.FileEncryptor;
 import Utils.FileOperations;
 
 import java.io.IOException;
 
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -18,6 +20,12 @@ public class DoubleEncryptionTest {
     public DoubleEncryptionTest() throws IOException {
         this.fileEncryptor = new FileEncryptor(new DoubleEncryption(new ShiftUpEncryption(), new ShiftMultiplyEncryption()), originalPath);
     }
+
+    @Before
+    public void before(){
+        fileEncryptor.addObserver(new EncryptionLogger(this.fileEncryptor));
+    }
+
 
     @Test
     public void Test() {

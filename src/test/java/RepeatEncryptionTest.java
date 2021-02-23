@@ -1,10 +1,12 @@
 import EncryptionAlgorithms.RepeatEncryption;
 import EncryptionAlgorithms.ShiftMultiplyEncryption;
+import EventsLogger.EncryptionLogger;
 import FileEncryptor.FileEncryptor;
 import Utils.FileOperations;
 
 import java.io.IOException;
 
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -17,6 +19,12 @@ public class RepeatEncryptionTest {
     public RepeatEncryptionTest() throws IOException {
         this.fileEncryptor = new FileEncryptor(new RepeatEncryption(new ShiftMultiplyEncryption(), 3), originalPath);
     }
+
+    @Before
+    public void before(){
+        fileEncryptor.addObserver(new EncryptionLogger(this.fileEncryptor));
+    }
+
 
     @Test
     public void Test() {

@@ -1,11 +1,12 @@
 import EncryptionAlgorithms.*;
+import Exceptions.InvalidKeyException;
 import FileEncryptor.FileEncryptor;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InvalidKeyException {
         String pathToFile = "C:\\Users\\ofeko\\IdeaProjects\\EncryptionProject\\src\\main\\resources\\Hi.txt";
         ArrayList<FileEncryptor> fileEncryptors = new ArrayList<>();
 

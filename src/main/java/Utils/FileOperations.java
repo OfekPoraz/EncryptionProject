@@ -57,7 +57,9 @@ public class FileOperations {
         Scanner myScanner = new Scanner(myFile);
         while (myScanner.hasNextLine()){
             stringBuffer.append(myScanner.nextLine());
-            stringBuffer.append(System.getProperty("line.separator"));
+            if (myScanner.hasNextLine()) {
+                stringBuffer.append(System.lineSeparator());
+            }
         }
         return stringBuffer.toString();
     }

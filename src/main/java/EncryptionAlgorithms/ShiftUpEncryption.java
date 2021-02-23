@@ -32,22 +32,8 @@ public class ShiftUpEncryption extends EncryptionAlgorithm{
 
     @Override
     public String decryptFile(String stringToEncrypt, int decryptionKey) throws IOException, NoSuchElementException, ClassCastException {
-        StringBuffer encryptedData = new StringBuffer();
-        for (int i = 0 ; i < stringToEncrypt.length() ; i ++){
-            if (checkIfAlphabet(stringToEncrypt.charAt(i), false)){
-                int dataToEncrypt = stringToEncrypt.charAt(i) - 'a' + 26;
-                dataToEncrypt = (dataToEncrypt - decryptionKey) % 26;
-                encryptedData.append((char) (dataToEncrypt + 'a'));
-            } else if (checkIfAlphabet(stringToEncrypt.charAt(i), true)){
-                int dataToEncrypt = stringToEncrypt.charAt(i) - 'A' + 26;
-                dataToEncrypt = (dataToEncrypt - decryptionKey) % 26;
-                encryptedData.append((char) (dataToEncrypt + 'A'));
-            } else {
-                encryptedData.append(stringToEncrypt.charAt(i));
-
-            }
-        }
-        return encryptedData.toString();
+        int decryptionKeyInner = 26 - decryptionKey;
+        return encryptFile(stringToEncrypt, decryptionKeyInner);
     }
 
     @Override
