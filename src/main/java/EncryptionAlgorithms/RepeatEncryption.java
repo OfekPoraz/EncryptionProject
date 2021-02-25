@@ -14,17 +14,17 @@ public class RepeatEncryption extends EncryptionAlgorithm{
     }
 
     @Override
-    public String encryptFile(String stringToEncrypt, int encryptionKey) throws IOException, NoSuchElementException, ClassCastException {
+    public String encryptString(String stringToEncrypt, int encryptionKey) throws IOException, NoSuchElementException, ClassCastException {
         for (int i = 0 ; i < numberOfTimesToEncrypt ; i++){
-            stringToEncrypt = algorithm.encryptFile(stringToEncrypt, encryptionKey);
+            stringToEncrypt = algorithm.encryptString(stringToEncrypt, encryptionKey);
         }
         return stringToEncrypt;
     }
 
     @Override
-    public String decryptFile(String stringToDecrypt, int decryptionKey) throws IOException, NoSuchElementException, ClassCastException {
+    public String decryptString(String stringToDecrypt, int decryptionKey) throws IOException, NoSuchElementException, ClassCastException {
         for (int i = 0 ; i < numberOfTimesToEncrypt ; i++){
-            stringToDecrypt = algorithm.decryptFile(stringToDecrypt, decryptionKey);
+            stringToDecrypt = algorithm.decryptString(stringToDecrypt, decryptionKey);
         }
         return stringToDecrypt;
     }

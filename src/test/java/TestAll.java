@@ -9,9 +9,7 @@ import org.junit.runners.Suite;
         DoubleEncryptionTest.class,
         RepeatEncryptionTest.class,
         XorEncryptionTest.class,
-        FileNotFoundExceptionTest.class,
-        IOExceptionTest.class,
-        NullPointerExceptionTest.class
+
 })
 public class TestAll {
 

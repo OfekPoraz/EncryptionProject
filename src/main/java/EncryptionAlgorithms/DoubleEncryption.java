@@ -19,15 +19,15 @@ public class DoubleEncryption extends EncryptionAlgorithm{
     }
 
     @Override
-    public String encryptFile(String stringToEncrypt, int encryptionKey) throws IOException, NoSuchElementException, ClassCastException {
-        String middleEncryption = algorithm1.encryptFile(stringToEncrypt, encryptionKey);
-        return algorithm2.encryptFile(middleEncryption, secondKey);
+    public String encryptString(String stringToEncrypt, int encryptionKey) throws IOException, NoSuchElementException, ClassCastException {
+        String middleEncryption = algorithm1.encryptString(stringToEncrypt, encryptionKey);
+        return algorithm2.encryptString(middleEncryption, secondKey);
     }
 
     @Override
-    public String decryptFile(String stringToDecrypt, int decryptionKey) throws IOException, NoSuchElementException, ClassCastException {
-        String middleDecryption = algorithm2.decryptFile(stringToDecrypt, secondKey);
-        return algorithm1.decryptFile(middleDecryption, decryptionKey);
+    public String decryptString(String stringToDecrypt, int decryptionKey) throws IOException, NoSuchElementException, ClassCastException {
+        String middleDecryption = algorithm2.decryptString(stringToDecrypt, secondKey);
+        return algorithm1.decryptString(middleDecryption, decryptionKey);
     }
 
     @Override

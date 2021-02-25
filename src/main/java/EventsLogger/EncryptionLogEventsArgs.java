@@ -10,13 +10,16 @@ public class EncryptionLogEventsArgs {
     private String outputFilePath;
     private long time;
     private final Events event;
+    private String fileOrDir;
 
-    public EncryptionLogEventsArgs(EncryptionAlgorithm algorithm, String originalFilePath, String outputFilePath, long time, Events events) {
+    public EncryptionLogEventsArgs(EncryptionAlgorithm algorithm, String originalFilePath, String outputFilePath,
+                                   long time, Events events, String fileOrDir) {
         this.algorithm = algorithm;
         this.originalFilePath = originalFilePath;
         this.outputFilePath = outputFilePath;
         this.time = time;
         this.event = events;
+        this.fileOrDir = fileOrDir;
     }
 
     public String getLoggerMassage(EncryptionLogEventsArgs startingEvent) {
@@ -26,7 +29,7 @@ public class EncryptionLogEventsArgs {
         } else if (event == Events.DecryptionEnded) {
             EncryptionOrDecryption = "decryption" ;
         }
-        return "The " + EncryptionOrDecryption + " of file " + originalFilePath + " with algorithm " +
+        return "The " + EncryptionOrDecryption + " of " + fileOrDir + " " + originalFilePath + " with algorithm " +
                 algorithm.getName() + " took " + (time - startingEvent.time) + " ms. The output file is located in " +
                 outputFilePath + " " + event;
     }

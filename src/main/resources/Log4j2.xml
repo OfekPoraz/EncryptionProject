@@ -5,12 +5,13 @@
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
         <File name="MyFile" fileName="C:\Users\ofeko\IdeaProjects\EncryptionProject\src\app.log">
-            <param name="Append" value="false" />
+            <param name="append" value="false"/>
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </File>
     </Appenders>
+
     <Loggers>
-        <Root level="info">
+        <Root level="debug">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="MyFile"/>
         </Root>

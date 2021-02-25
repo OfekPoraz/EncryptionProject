@@ -1,9 +1,9 @@
 package Utils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import Keys.Key;
+
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,17 +14,27 @@ public class FileOperations {
     private File myFile;
     private String pathToFile;
     private String parentPathToFile;
+    private String fileName;
 
     public FileOperations(String pathToFile, String nameOfFile) throws IOException, NullPointerException{
         myFile = createFile(pathToFile, nameOfFile);
         this.pathToFile = myFile.getPath();
         this.parentPathToFile = myFile.getAbsoluteFile().getParent();
+        this.fileName = myFile.getName();
+    }
+
+    public FileOperations(String pathToDir, String nameOfDir, Boolean isDir){
+        myFile = createDirectory(pathToDir, nameOfDir);
+        this.pathToFile = myFile.getPath();
+        this.parentPathToFile = myFile.getAbsoluteFile().getParent();
+        this.fileName = myFile.getName();
     }
 
     public FileOperations(String pathToFile){
         this.myFile = new File(pathToFile);
         this.pathToFile = myFile.getPath();
         this.parentPathToFile = myFile.getAbsoluteFile().getParent();
+        this.fileName = myFile.getName();
     }
 
     public String getPathToFile() {
@@ -64,7 +74,7 @@ public class FileOperations {
         return stringBuffer.toString();
     }
 
-    public boolean compareFiles(String pathToFileOne, String pathToFileTwo) throws IOException, NullPointerException {
+    public boolean compareFilesByString(String pathToFileOne, String pathToFileTwo) throws IOException, NullPointerException {
         byte[] file1Bytes = Files.readAllBytes(Paths.get(pathToFileOne));
         byte[] file2Bytes = Files.readAllBytes(Paths.get(pathToFileTwo));
 
@@ -72,6 +82,22 @@ public class FileOperations {
         String file2 = new String(file2Bytes, StandardCharsets.UTF_8);
 
         return file1.equals(file2);
+    }
+
+    public File createDirectory(String pathToDirectory, String nameOfDirectory){
+        File newDir = new File(pathToDirectory + File.separator + nameOfDirectory);
+        if (newDir.mkdir()){
+            System.out.println("New directory Created: " + newDir.getName());
+        } else {
+            System.out.println("Directory already exist, overriding it");
+        }
+        return newDir;
+    }
+
+
+    public String[] getFilesFromDirectoryTxt(){
+        FilenameFilter filter = (dir, name) -> (name.endsWith(".txt"));
+        return this.myFile.list(filter);
     }
 
 }

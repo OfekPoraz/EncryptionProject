@@ -1,11 +1,16 @@
 package Keys;
 
+import EventsLogger.EncryptionLog4JLogger;
+import org.apache.logging.log4j.Level;
+
 import java.security.SecureRandom;
 
 public class Key {
+    private final EncryptionLog4JLogger log4JLogger = new EncryptionLog4JLogger();
     private int key;
 
     public Key() {
+        log4JLogger.writeToLogger("Generating a new key", Level.DEBUG);
         SecureRandom secureRandomNumber = new SecureRandom();
         while (true) {
             int number = secureRandomNumber.nextInt(26);
