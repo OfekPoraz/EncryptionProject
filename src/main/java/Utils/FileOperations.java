@@ -37,6 +37,10 @@ public class FileOperations {
         this.fileName = myFile.getName();
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
     public String getPathToFile() {
         return pathToFile;
     }
