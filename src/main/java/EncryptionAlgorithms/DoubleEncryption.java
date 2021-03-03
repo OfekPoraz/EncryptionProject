@@ -1,5 +1,6 @@
 package EncryptionAlgorithms;
 
+import EventsLogger.Events;
 import Keys.Key;
 
 import java.io.IOException;
@@ -20,12 +21,15 @@ public class DoubleEncryption extends EncryptionAlgorithm{
 
     @Override
     public String encryptString(String stringToEncrypt, int encryptionKey) throws IOException, NoSuchElementException, ClassCastException {
+        setEvent("Starting to encrypt string", Events.Debug);
         String middleEncryption = algorithm1.encryptString(stringToEncrypt, encryptionKey);
+        setEvent("finished to encrypt string", Events.Debug);
         return algorithm2.encryptString(middleEncryption, secondKey);
     }
 
     @Override
     public String decryptString(String stringToDecrypt, int decryptionKey) throws IOException, NoSuchElementException, ClassCastException {
+        setEvent("Starting to decrypt string", Events.Debug);
         String middleDecryption = algorithm2.decryptString(stringToDecrypt, secondKey);
         return algorithm1.decryptString(middleDecryption, decryptionKey);
     }

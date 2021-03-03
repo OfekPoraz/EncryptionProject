@@ -50,8 +50,6 @@ public class ASyncDirectoryProcessor extends Thread implements IDirectoryProcess
         } else {
             this.encryptedFile = new FileOperations(encryptDir.getPathToFile() + File.separator + fileName);
             this.decryptedFile = new FileOperations(decryptDir.getPathToFile(), getClearName(fileName));
-
-//            this.decryptedFile = new FileOperations(encryptDir.getPathToFile() + File.separator + fileName);
         }
     }
 

@@ -1,44 +1,43 @@
 package EncryptionAlgorithms;
 
-import EventsLogger.EncryptionLog4JLogger;
-import org.apache.logging.log4j.Level;
+import EventsLogger.Events;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
 public class ShiftUpEncryption extends EncryptionAlgorithm{
-    private final EncryptionLog4JLogger log4JLogger = new EncryptionLog4JLogger();
 
     public ShiftUpEncryption() {
         super("ShiftUp");
     }
 
     @Override
-    public String encryptString(String stringToEncrypt, int encryptionKey) throws IOException, NoSuchElementException, ClassCastException {
+    public String encryptString(String stringToEncrypt, int encryptionKey) throws NoSuchElementException, ClassCastException {
         StringBuffer encryptedData = new StringBuffer();
-        log4JLogger.writeToLogger("Starting to encrypt string", Level.DEBUG);
+        setEvent("Starting to encrypt string", Events.Debug);
         for (int i = 0 ; i < stringToEncrypt.length() ; i ++){
-            if (checkIfAlphabet(stringToEncrypt.charAt(i), false)){
-                int dataToEncrypt = stringToEncrypt.charAt(i) - 'a';
+            if (Character.isAlphabetic(stringToEncrypt.charAt(i))) {
+                char upperLower = 0;
+                if (Character.isUpperCase(stringToEncrypt.charAt(i))) {
+                    upperLower = 'A';
+                } else {
+                    upperLower = 'a';
+                }
+                int dataToEncrypt = stringToEncrypt.charAt(i) - upperLower;
                 dataToEncrypt = (dataToEncrypt + encryptionKey) % 26;
-                encryptedData.append((char) (dataToEncrypt + 'a'));
-            } else if (checkIfAlphabet(stringToEncrypt.charAt(i), true)){
-                int dataToEncrypt = stringToEncrypt.charAt(i) - 'A';
-                dataToEncrypt = (dataToEncrypt + encryptionKey) % 26;
-                encryptedData.append((char) (dataToEncrypt + 'A'));
+                encryptedData.append((char) (dataToEncrypt + upperLower));
             } else {
                 encryptedData.append(stringToEncrypt.charAt(i));
-
             }
         }
-        log4JLogger.writeToLogger("finished to encrypt string", Level.DEBUG);
+        setEvent("finished to encrypt string", Events.Debug);
         return encryptedData.toString();
 
     }
 
     @Override
     public String decryptString(String stringToEncrypt, int decryptionKey) throws IOException, NoSuchElementException, ClassCastException {
-        log4JLogger.writeToLogger("Starting to decrypt string", Level.DEBUG);
+        setEvent("Starting to decrypt string", Events.Debug);
         int decryptionKeyInner = 26 - decryptionKey;
         return encryptString(stringToEncrypt, decryptionKeyInner);
 

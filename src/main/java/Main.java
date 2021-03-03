@@ -1,23 +1,36 @@
+import DirectoryEncryptor.ASyncDirectoryEncryptor;
+import DirectoryEncryptor.ASyncDirectoryProcessor;
 import DirectoryEncryptor.SyncDirectoryProcessor;
 import EncryptionAlgorithms.*;
 import EventsLogger.EncryptionLogger;
 import Exceptions.InvalidKeyException;
 import FileEncryptor.FileEncryptor;
+import Utils.FileOperations;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) throws IOException, InvalidKeyException {
-        String pathToFile = "C:\\Users\\ofeko\\IdeaProjects\\EncryptionProject\\src\\main\\resources";
-        SyncDirectoryProcessor directoryProcessor = new SyncDirectoryProcessor(pathToFile, new ShiftUpEncryption());
+        try {
+            String pathToFile = "C:\\Users\\ofeko\\IdeaProjects\\EncryptionProject\\src\\main\\resources";
+            FileOperations keyFile = new FileOperations("C:\\Users\\ofeko\\IdeaProjects\\EncryptionProject\\src\\main\\resources\\SyncDirectoryKeyShiftUp.txt");
+            SyncDirectoryProcessor directoryProcessor = new SyncDirectoryProcessor(pathToFile, new ShiftUpEncryption());
 
-        directoryProcessor.addObserver(new EncryptionLogger(directoryProcessor));
+            directoryProcessor.addObserver(new EncryptionLogger(directoryProcessor));
 
-        directoryProcessor.encryptDirectory();
-        directoryProcessor.decryptDirectory();
+            directoryProcessor.encryptDirectory();
+            directoryProcessor.decryptDirectory();
 
+            ASyncDirectoryEncryptor directoryProcessor1 = new ASyncDirectoryEncryptor(pathToFile, keyFile, new ShiftUpEncryption());
 
+            directoryProcessor1.addObserver(new EncryptionLogger(directoryProcessor1));
+
+            directoryProcessor1.encryptDirectory();
+            directoryProcessor1.decryptDirectory();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
 //        ArrayList<FileEncryptor> fileEncryptors = new ArrayList<>();
 //

@@ -9,8 +9,10 @@ public class EncryptionLogEventsArgs {
     private String originalFilePath;
     private String outputFilePath;
     private long time;
-    private final Events event;
+    private Events event;
     private String fileOrDir;
+
+    private String msg;
 
     public EncryptionLogEventsArgs(EncryptionAlgorithm algorithm, String originalFilePath, String outputFilePath,
                                    long time, Events events, String fileOrDir) {
@@ -22,16 +24,44 @@ public class EncryptionLogEventsArgs {
         this.fileOrDir = fileOrDir;
     }
 
-    public String getLoggerMassage(EncryptionLogEventsArgs startingEvent) {
+    public EncryptionLogEventsArgs(String msg, Events events, long time, EncryptionAlgorithm algorithm){
+        this.event = events;
+        this.msg = msg;
+        this.time = time;
+        this.algorithm = algorithm;
+    }
+
+    public String getLoggerMassage(EncryptionLogEventsArgs startingEvent, String state) {
         String EncryptionOrDecryption = null;
-        if (event == Events.EncryptionEnded) {
-            EncryptionOrDecryption = "encryption" ;
-        } else if (event == Events.DecryptionEnded) {
-            EncryptionOrDecryption = "decryption" ;
+        if (event == Events.EncryptionEnded || event == Events.EncryptionStarted) {
+            EncryptionOrDecryption = "encryption";
+        } else if (event == Events.DecryptionEnded || event == Events.DecryptionStarted) {
+            EncryptionOrDecryption = "decryption";
         }
-        return "The " + EncryptionOrDecryption + " of " + fileOrDir + " " + originalFilePath + " with algorithm " +
-                algorithm.getName() + " took " + (time - startingEvent.time) + " ms. The output file is located in " +
-                outputFilePath + " " + event;
+        if (state.equals("Ended")) {
+            return "The " + EncryptionOrDecryption + " of " + fileOrDir + " " + originalFilePath + " with algorithm " +
+                    algorithm.getName() + " took " + (time - startingEvent.time) + " ms. The output file is located in " +
+                    outputFilePath + " " + event;
+        }
+        else{
+            return "The " + EncryptionOrDecryption + " of " + fileOrDir + " " + originalFilePath + " with algorithm " +
+                    algorithm.getName() + " is starting";
+        }
+
+    }
+
+    public String getLoggerMassage(EncryptionLogEventsArgs eventsArgs){
+        String event = eventsArgs.getEvent().toString();
+        if (event.equals("Error")){
+            return "An ERROR occurred at time: " + time + "while trying to run, when processing " + originalFilePath +
+                    "destination: " + outputFilePath + " in algorithm: " + algorithm;
+        } else{
+            return msg + " while in " + algorithm;
+        }
+    }
+
+    public Events getEvent() {
+        return event;
     }
 
     @Override

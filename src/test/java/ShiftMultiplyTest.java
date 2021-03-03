@@ -7,22 +7,24 @@ import Utils.FileOperations;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class ShiftMultiplyTest {
 
-    static final private String originalPath = "C:\\Users\\ofeko\\IdeaProjects\\EncryptionProject\\src\\main\\resources\\Hi.txt";
-    private final FileOperations fileOperations = new FileOperations(originalPath);
-    private FileEncryptor fileEncryptor;
+    static private String originalPath;
+    private static FileOperations fileOperations;
+    private static FileEncryptor fileEncryptor;
 
 
-    @Before
-    public void before(){
+    @BeforeClass
+    public static void before(){
         try {
-            this.fileEncryptor = new FileEncryptor(new ShiftMultiplyEncryption(), originalPath);
-            fileEncryptor.addObserver(new EncryptionLogger(this.fileEncryptor));
+            originalPath = TestAll.getPathToFile();
+            fileOperations = TestAll.getFileOperations();
+            fileEncryptor = new FileEncryptor(new ShiftMultiplyEncryption(), originalPath);
+            fileEncryptor.addObserver(new EncryptionLogger(fileEncryptor));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -4,5 +4,7 @@ public enum Events {
     EncryptionStarted,
     EncryptionEnded,
     DecryptionStarted,
-    DecryptionEnded
+    DecryptionEnded,
+    Error,
+    Debug
 }

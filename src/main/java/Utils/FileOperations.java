@@ -1,8 +1,5 @@
 package Utils;
 
-import Keys.Key;
-
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -52,9 +49,9 @@ public class FileOperations {
     public File createFile(String pathToFile, String nameOfFile) throws IOException, NullPointerException {
         File newFile = new File(pathToFile + File.separator + nameOfFile + ".txt");
         if (newFile.createNewFile()){
-            System.out.println("New file created : " + newFile.getName());
+//            System.out.println("New file created : " + newFile.getName());
         } else {
-            System.out.println("File already exist, overriding the file");
+//            System.out.println("File already exist, overriding the file");
         }
         return newFile;
     }
@@ -91,9 +88,9 @@ public class FileOperations {
     public File createDirectory(String pathToDirectory, String nameOfDirectory){
         File newDir = new File(pathToDirectory + File.separator + nameOfDirectory);
         if (newDir.mkdir()){
-            System.out.println("New directory Created: " + newDir.getName());
+//            System.out.println("New directory Created: " + newDir.getName());
         } else {
-            System.out.println("Directory already exist, overriding it");
+//            System.out.println("Directory already exist, overriding it");
         }
         return newDir;
     }

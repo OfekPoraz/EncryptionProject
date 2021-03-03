@@ -14,7 +14,7 @@ public class Key {
         SecureRandom secureRandomNumber = new SecureRandom();
         while (true) {
             int number = secureRandomNumber.nextInt(26);
-            if (coPrime(number, 26)) {
+            if (coPrime(number, 26) && number !=7) {
                 this.key = number;
                 break;
             }
