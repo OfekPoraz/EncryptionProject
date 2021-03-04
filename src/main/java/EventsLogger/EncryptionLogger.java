@@ -7,7 +7,7 @@ import java.util.*;
 public class EncryptionLogger implements Observer {
     private Observable observableEncryptor;
     private static Map<EncryptionLogEventsArgs, EncryptionLogEventsArgs> allEventsUntilNow = new HashMap<>();
-    private final EncryptionLog4JLogger log4JLogger;
+    private EncryptionLog4JLogger log4JLogger;
 
     public EncryptionLogger(Observable observableEncryptor, EncryptionLog4JLogger log4JLogger) {
         this.observableEncryptor = observableEncryptor;
@@ -17,6 +17,19 @@ public class EncryptionLogger implements Observer {
 
     public EncryptionLogger(Observable observableEncryptor) {
         this(observableEncryptor, new EncryptionLog4JLogger());
+    }
+
+    public EncryptionLogger(){
+        this.log4JLogger = new EncryptionLog4JLogger();
+        this.observableEncryptor = null;
+    }
+
+    public void writeDebugLog(String info){
+        log4JLogger.writeToLogger(info, Level.DEBUG);
+    }
+
+    public void writeErrorLog(String info){
+        log4JLogger.writeToLogger(info, Level.ERROR);
     }
 
 

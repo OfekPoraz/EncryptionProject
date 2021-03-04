@@ -17,17 +17,14 @@ public class RepeatEncryption extends EncryptionAlgorithm{
 
     @Override
     public String encryptString(String stringToEncrypt, int encryptionKey) throws IOException, NoSuchElementException, ClassCastException {
-        setEvent("Starting to encrypt string", Events.Debug);
         for (int i = 0 ; i < numberOfTimesToEncrypt ; i++){
             stringToEncrypt = algorithm.encryptString(stringToEncrypt, encryptionKey);
         }
-        setEvent("finished to encrypt string", Events.Debug);
         return stringToEncrypt;
     }
 
     @Override
     public String decryptString(String stringToDecrypt, int decryptionKey) throws IOException, NoSuchElementException, ClassCastException {
-        setEvent("Starting to decrypt string", Events.Debug);
         for (int i = 0 ; i < numberOfTimesToEncrypt ; i++){
             stringToDecrypt = algorithm.decryptString(stringToDecrypt, decryptionKey);
         }

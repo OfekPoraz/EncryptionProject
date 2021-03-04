@@ -12,19 +12,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class DoubleEncryptionTest {
+public class DoubleEncryptionTest extends abstractTestClass{
 
-    static private String originalPath;
-    private static FileOperations fileOperations;
     private static FileEncryptor fileEncryptor;
-
 
     @BeforeClass
     public static void before(){
         try {
-            originalPath = TestAll.getPathToFile();
-            fileOperations = TestAll.getFileOperations();
-            fileEncryptor = new FileEncryptor(new DoubleEncryption(new ShiftUpEncryption(), new ShiftMultiplyEncryption()), originalPath);
+            fileEncryptor = new FileEncryptor(new DoubleEncryption(new ShiftUpEncryption(), new ShiftMultiplyEncryption()), getOriginalPath());
             fileEncryptor.addObserver(new EncryptionLogger(fileEncryptor));
         } catch (IOException e) {
             e.printStackTrace();
@@ -39,7 +34,7 @@ public class DoubleEncryptionTest {
             fileEncryptor.decryptFile();
             String decryptedFile = fileEncryptor.getPathToDecryptedFile();
 
-            boolean equals = fileOperations.compareFilesByString(originalPath, decryptedFile);
+            boolean equals = getFileOperations().compareFilesByString(getOriginalPath(), decryptedFile);
             assertTrue(equals);
         } catch (Exception e){
             fail();

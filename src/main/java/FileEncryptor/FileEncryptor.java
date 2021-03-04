@@ -3,13 +3,12 @@ package FileEncryptor;
 import EncryptionAlgorithms.EncryptionAlgorithm;
 import EventsLogger.EncryptionLog4JLogger;
 import EventsLogger.EncryptionLogEventsArgs;
-import EventsLogger.EncryptionLogger;
 import EventsLogger.Events;
 import Keys.Key;
 import Utils.FileOperations;
 import Exceptions.InvalidKeyException;
-import org.apache.logging.log4j.Level;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Observable;
 
@@ -27,12 +26,24 @@ public class FileEncryptor extends Observable implements Comparable<FileEncrypto
     public FileEncryptor(EncryptionAlgorithm algorithm, String pathToFile) throws IOException, NullPointerException {
         this.algorithm = algorithm;
         this.nameOfAlgorithm = algorithm.getNameOfEncryption();
-        log4JLogger.writeToLogger("Creating FileEncryptor Instance for " + nameOfAlgorithm, Level.DEBUG);
         this.fileToEncrypt = new FileOperations(pathToFile);
         this.encryptedFile = new FileOperations(fileToEncrypt.getParentPathToFile(), "Encrypted"+ nameOfAlgorithm);
         this.decryptedFile = new FileOperations(fileToEncrypt.getParentPathToFile(), "Decrypted"+ nameOfAlgorithm);
         this.keyFile = new FileOperations(fileToEncrypt.getParentPathToFile(), "Key" + nameOfAlgorithm);
-        addAlgorithmObserver();
+    }
+
+    public FileEncryptor(EncryptionAlgorithm algorithm,
+                         FileOperations encryptedDir,
+                         FileOperations decryptedDir,
+                         FileOperations keyFile,
+                         String fileName) throws IOException {
+        this.algorithm = algorithm;
+        this.nameOfAlgorithm = algorithm.getNameOfEncryption();
+        this.fileToEncrypt = new FileOperations(encryptedDir.getParentPathToFile() + File.separator + fileName);
+        this.encryptedFile = new FileOperations(encryptedDir.getPathToFile(), getClearName(fileName));
+        this.decryptedFile = new FileOperations(decryptedDir.getPathToFile(), getClearName(fileName));
+        this.keyFile = keyFile;
+
     }
 
     public FileEncryptor(EncryptionAlgorithm algorithm, FileOperations fileToEncrypt, FileOperations encryptedFile,
@@ -43,12 +54,8 @@ public class FileEncryptor extends Observable implements Comparable<FileEncrypto
         this.encryptedFile = encryptedFile;
         this.decryptedFile = decryptedFile;
         this.keyFile = keyFile;
-        addAlgorithmObserver();
     }
 
-    public void addAlgorithmObserver(){
-        algorithm.addObserver(new EncryptionLogger(algorithm));
-    }
 
     public int generateKey(FileOperations keyFile, boolean isDir) throws InvalidKeyException, IOException {
         int k;
@@ -90,6 +97,9 @@ public class FileEncryptor extends Observable implements Comparable<FileEncrypto
         return this.decryptedFile.getPathToFile();
     }
 
+    public String getClearName(String name){
+        return name.replaceFirst("[.][^.]+$", "");
+    }
 
     public void setEvent(String originalPath, String outputFile, Events event){
         long time = System.currentTimeMillis();

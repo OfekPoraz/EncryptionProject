@@ -8,25 +8,18 @@ import Utils.FileOperations;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.apache.logging.log4j.Level;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class ShiftUpTest {
+public class ShiftUpTest extends abstractTestClass {
 
-    static private String originalPath;
-    private static FileOperations fileOperations;
     private static FileEncryptor fileEncryptor;
-    private final EncryptionLog4JLogger log4JLogger = new EncryptionLog4JLogger();
-
 
     @BeforeClass
     public static void before(){
         try {
-            originalPath = TestAll.getPathToFile();
-            fileOperations = TestAll.getFileOperations();
-            fileEncryptor = new FileEncryptor(new ShiftUpEncryption(), originalPath);
+            fileEncryptor = new FileEncryptor(new ShiftUpEncryption(), getOriginalPath());
             fileEncryptor.addObserver(new EncryptionLogger(fileEncryptor));
         } catch (IOException e){
             e.printStackTrace();
@@ -36,12 +29,11 @@ public class ShiftUpTest {
     @Test
     public void Test(){
         try {
-            log4JLogger.writeToLogger("Testing Shift Up algorithm", Level.INFO);
             fileEncryptor.encryptFile(false);
             fileEncryptor.decryptFile();
             String decryptedFile = fileEncryptor.getPathToDecryptedFile();
 
-            boolean equals = fileOperations.compareFilesByString(originalPath, decryptedFile);
+            boolean equals = getFileOperations().compareFilesByString(getOriginalPath(), decryptedFile);
             assertTrue(equals);
 
         } catch (Exception e){

@@ -1,8 +1,5 @@
 package EncryptionAlgorithms;
 
-import EventsLogger.Events;
-
-import java.io.IOException;
 import java.util.NoSuchElementException;
 
 public class ShiftMultiplyEncryption extends EncryptionAlgorithm{
@@ -12,33 +9,24 @@ public class ShiftMultiplyEncryption extends EncryptionAlgorithm{
     }
 
     @Override
-    public String encryptString(String stringToEncrypt, int encryptionKey) throws IOException, NoSuchElementException, ClassCastException{
-        setEvent("Starting to encrypt string", Events.Debug);
+    public String encryptString(String stringToEncrypt, int encryptionKey) throws NoSuchElementException, ClassCastException{
         StringBuffer encryptedData = new StringBuffer();
+
         for (int i = 0 ; i < stringToEncrypt.length(); i ++){
             if (Character.isAlphabetic(stringToEncrypt.charAt(i))) {
-                char upperLower = 0;
-                if (Character.isUpperCase(stringToEncrypt.charAt(i))) {
-                    upperLower = 'A';
-                } else {
-                    upperLower = 'a';
-                }
+                char upperLower = Character.isUpperCase(stringToEncrypt.charAt(i)) ? 'A' : 'a';
                 int dataToEncrypt = stringToEncrypt.charAt(i) - upperLower;
                 dataToEncrypt = (dataToEncrypt * encryptionKey) % MODULO;
                 encryptedData.append((char) (dataToEncrypt + upperLower));
             } else {
                 encryptedData.append(stringToEncrypt.charAt(i));
             }
-
         }
-        setEvent("finished to encrypt string", Events.Debug);
         return encryptedData.toString();
-
     }
 
     @Override
-    public String decryptString(String stringToDecrypt, int decryptionKey) throws IOException, NoSuchElementException, ClassCastException {
-        setEvent("Starting to decrypt string", Events.Debug);
+    public String decryptString(String stringToDecrypt, int decryptionKey) throws NoSuchElementException, ClassCastException {
         int decryptionKeyModuloInverse = getReverseModulo(decryptionKey);
         return encryptString(stringToDecrypt , decryptionKeyModuloInverse);
     }

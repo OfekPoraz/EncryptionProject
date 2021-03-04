@@ -1,14 +1,11 @@
-import DirectoryEncryptor.ASyncDirectoryEncryptor;
 import DirectoryEncryptor.ASyncDirectoryProcessor;
 import DirectoryEncryptor.SyncDirectoryProcessor;
 import EncryptionAlgorithms.*;
 import EventsLogger.EncryptionLogger;
 import Exceptions.InvalidKeyException;
-import FileEncryptor.FileEncryptor;
 import Utils.FileOperations;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) throws IOException, InvalidKeyException {
@@ -22,7 +19,7 @@ public class Main {
             directoryProcessor.encryptDirectory();
             directoryProcessor.decryptDirectory();
 
-            ASyncDirectoryEncryptor directoryProcessor1 = new ASyncDirectoryEncryptor(pathToFile, keyFile, new ShiftUpEncryption());
+            ASyncDirectoryProcessor directoryProcessor1 = new ASyncDirectoryProcessor(pathToFile, keyFile, new ShiftUpEncryption());
 
             directoryProcessor1.addObserver(new EncryptionLogger(directoryProcessor1));
 

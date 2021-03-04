@@ -1,88 +1,72 @@
 package DirectoryEncryptor;
 
 import EncryptionAlgorithms.EncryptionAlgorithm;
-import EventsLogger.EncryptionLog4JLogger;
-import EventsLogger.EncryptionLogger;
+
+import EventsLogger.Events;
 import Exceptions.InvalidKeyException;
-import FileEncryptor.FileEncryptor;
 import Utils.FileOperations;
 
-import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class ASyncDirectoryProcessor extends Thread implements IDirectoryProcessor {
-    private final EncryptionLog4JLogger log4JLogger = new EncryptionLog4JLogger();
+public class ASyncDirectoryProcessor extends DirectoryProcessor {
 
-    private Boolean TrueIfEncrypt;
-    private String pathToFile;
-    private String fileName;
-    private EncryptionAlgorithm encryptionAlgorithm;
-    private FileOperations keyFile;
+    private final ExecutorService encryptThreadExecutor = Executors.newFixedThreadPool(10);
+    private final ExecutorService decryptThreadExecutor = Executors.newFixedThreadPool(10);
+    private FileOperations encryptedDir;
+    private FileOperations decryptedDir;
 
-    private FileOperations fileToEncrypt;
-    private FileOperations encryptedFile;
-    private FileOperations decryptedFile;
-    private FileOperations encryptDir;
-    private FileOperations decryptDir;
-
-    private FileEncryptor fileEncryptor;
-
-
-
-    public ASyncDirectoryProcessor(String pathToFile, EncryptionAlgorithm encryptionAlgorithm, FileOperations keyFile,
-                                   FileOperations encryptDir, FileOperations decryptDir, Boolean TrueIfEncrypt) {
-
-       this.pathToFile = pathToFile;
-       this.encryptionAlgorithm = encryptionAlgorithm;
-       this.keyFile = keyFile;
-       this.TrueIfEncrypt = TrueIfEncrypt;
-       this.fileToEncrypt = new FileOperations(pathToFile);
-       this.encryptDir = encryptDir;
-       this.decryptDir = decryptDir;
-       this.fileName = fileToEncrypt.getFileName();
+    public ASyncDirectoryProcessor(String pathToDir,
+                                   FileOperations keyFile,
+                                   EncryptionAlgorithm encryptionAlgorithm) throws IOException, InvalidKeyException {
+        super(keyFile, encryptionAlgorithm, pathToDir);
+        this.encryptedDir = new FileOperations(pathToDir,
+                encryptionAlgorithm.getNameOfEncryption() + "EncryptedASynchronized",
+                true);
+        this.decryptedDir = new FileOperations(pathToDir,
+                encryptionAlgorithm.getNameOfEncryption() + "DecryptedASynchronized",
+                true);
+        generateKey();
     }
 
+    @Override
+    public void encryptDirectory() {
+        setEvent(getPathToDir(), encryptedDir.getPathToFile() , Events.EncryptionStarted, getEncryptionAlgorithm());
+        encryptDecryptScript(true);
+        setEvent(getPathToDir(), encryptedDir.getPathToFile() , Events.EncryptionEnded, getEncryptionAlgorithm());
+    }
 
-    public void createFiles() throws IOException {
+    @Override
+    public void decryptDirectory() {
+        setEvent(getPathToDir(), encryptedDir.getPathToFile() , Events.DecryptionStarted, getEncryptionAlgorithm());
+        encryptDecryptScript(false);
+        setEvent(getPathToDir(), encryptedDir.getPathToFile() , Events.DecryptionEnded, getEncryptionAlgorithm());
 
-        if (TrueIfEncrypt) {
-            this.encryptedFile = new FileOperations(encryptDir.getPathToFile(), getClearName(fileName));
+    }
+
+    public void encryptDecryptScript(Boolean encryptOrDecrypt){
+        ExecutorService executorService;
+
+        if (encryptOrDecrypt) {
+            executorService = encryptThreadExecutor;
         } else {
-            this.encryptedFile = new FileOperations(encryptDir.getPathToFile() + File.separator + fileName);
-            this.decryptedFile = new FileOperations(decryptDir.getPathToFile(), getClearName(fileName));
-        }
-    }
-
-    public String getClearName(String name){
-        return name.replaceFirst("[.][^.]+$", "");
-    }
-
-
-    @Override
-    public void encryptDirectory() throws InvalidKeyException, IOException {
-        fileEncryptor.encryptFile(true);
-    }
-
-    @Override
-    public void decryptDirectory() throws IOException {
-        fileEncryptor.decryptFile();
-    }
-
-    @Override
-    public void run() {
-        try {
-            createFiles();
-            fileEncryptor = new FileEncryptor(encryptionAlgorithm, fileToEncrypt, encryptedFile, decryptedFile, keyFile);
-            fileEncryptor.addObserver(new EncryptionLogger(this.fileEncryptor));
-            if (TrueIfEncrypt){
-                encryptDirectory();
-            } else {
-                decryptDirectory();
-            }
-        } catch (IOException | InvalidKeyException e) {
-            e.printStackTrace();
+            executorService = decryptThreadExecutor;
+            while (!encryptThreadExecutor.isTerminated());
         }
 
+        for (String file : getFileNames()) {
+            Runnable t = new ASyncDirectoryTask(getPathToDir(),
+                    getEncryptionAlgorithm(),
+                    getKeyFile(),
+                    encryptedDir,
+                    decryptedDir,
+                    encryptOrDecrypt,
+                    file);
+            executorService.execute(t);
+        }
+        executorService.shutdown();
 
+        while (!executorService.isTerminated()) {}
     }
 }

@@ -1,74 +1,52 @@
 package DirectoryEncryptor;
 
 import EncryptionAlgorithms.EncryptionAlgorithm;
-import EventsLogger.EncryptionLog4JLogger;
-import EventsLogger.EncryptionLogEventsArgs;
 import EventsLogger.EncryptionLogger;
 import EventsLogger.Events;
 import Exceptions.InvalidKeyException;
 import FileEncryptor.FileEncryptor;
-import Keys.Key;
 import Utils.FileOperations;
-import org.apache.logging.log4j.Level;
-
-import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Observable;
 
-public class SyncDirectoryProcessor extends DirectoryProcessor{
-    private final EncryptionLog4JLogger log4JLogger = new EncryptionLog4JLogger();
-
-    private String pathToDir;
-    private FileOperations directoryOperations;
+public class SyncDirectoryProcessor extends DirectoryProcessor {
+    public static final String SYNC_DECRYPTED = "SyncDecrypted";
+    public static final String SYNC_ENCRYPTED = "SyncEncrypted";
+    public static final String DIRECTORY_KEY = "DirectoryKey";
     private FileOperations encryptedDirectoryOperations;
     private FileOperations decryptedDirectoryOperations;
-    private FileOperations keyFile;
-    private EncryptionAlgorithm encryptionAlgorithm;
-    private List<FileEncryptor> fileEncryptorList = new LinkedList<>();
+    private final List<FileEncryptor> fileEncryptorList = new LinkedList<>();
 
-    public SyncDirectoryProcessor(String pathToFile, EncryptionAlgorithm encryptionAlgorithm) throws IOException, InvalidKeyException {
-        this.pathToDir = pathToFile;
-        this.keyFile = new FileOperations(pathToFile, "DirectoryKey" + encryptionAlgorithm.getNameOfEncryption());
-        this.encryptionAlgorithm = encryptionAlgorithm;
-        this.directoryOperations = new FileOperations(pathToFile);
+    public SyncDirectoryProcessor(String pathToDir,
+                                  EncryptionAlgorithm encryptionAlgorithm) throws IOException, InvalidKeyException {
+        super(new FileOperations(pathToDir, DIRECTORY_KEY + encryptionAlgorithm.getNameOfEncryption()),
+                encryptionAlgorithm,
+                pathToDir);
         generateKey();
         createFiles();
         setObserversForFiles();
     }
 
-    public String getClearName(String name){
-        return name.replaceFirst("[.][^.]+$", "");
-    }
-
-    public void generateKey() throws IOException, InvalidKeyException {
-        Key key = new Key();
-        try {
-            int k = (int)key.getKey();
-        } catch (ClassCastException e){
-            setEvent("Error in casting key", Events.Error, encryptionAlgorithm);
-            throw new InvalidKeyException("Invalid key, not an int");
-        }
-        this.keyFile.writeToFile(Integer.toString(key.getKey()));
-    }
-
     public void createFiles() throws IOException {
-        this.encryptedDirectoryOperations = new FileOperations(pathToDir, encryptionAlgorithm.getNameOfEncryption() + "encrypted", true);
-        this.decryptedDirectoryOperations = new FileOperations(pathToDir, encryptionAlgorithm.getNameOfEncryption() + "decrypted", true);
-        String[] filesToEncrypt = directoryOperations.getFilesFromDirectoryTxt();
-        for (String file : filesToEncrypt) {
-            if (!file.contains("Key")) {
-                FileOperations fileToEncrypt = new FileOperations(encryptedDirectoryOperations.getParentPathToFile() + File.separator + file);
-                FileOperations encryptedFile = new FileOperations(encryptedDirectoryOperations.getPathToFile(), getClearName(file));
-                FileOperations decryptedFile = new FileOperations(decryptedDirectoryOperations.getPathToFile(), getClearName(file));
-                FileEncryptor fileEncryptor = new FileEncryptor(encryptionAlgorithm, fileToEncrypt, encryptedFile, decryptedFile, keyFile);
-                fileEncryptorList.add(fileEncryptor);
-            }
+        encryptedDirectoryOperations = new FileOperations(getPathToDir(),
+                getEncryptionAlgorithm().getNameOfEncryption() + SYNC_ENCRYPTED,
+                true);
+        decryptedDirectoryOperations = new FileOperations(getPathToDir(),
+                getEncryptionAlgorithm().getNameOfEncryption() + SYNC_DECRYPTED,
+                true);
+
+        for (String file :  getFileNames()) {
+            FileEncryptor fileEncryptor = new FileEncryptor(getEncryptionAlgorithm(),
+                    encryptedDirectoryOperations,
+                    decryptedDirectoryOperations,
+                    getKeyFile(),
+                    file);
+            fileEncryptorList.add(fileEncryptor);
         }
     }
 
-    public void setObserversForFiles(){
+    public void setObserversForFiles() {
         for (FileEncryptor fileEncryptor : fileEncryptorList){
             fileEncryptor.addObserver(new EncryptionLogger(fileEncryptor));
         }
@@ -76,20 +54,34 @@ public class SyncDirectoryProcessor extends DirectoryProcessor{
 
     @Override
     public void encryptDirectory() throws InvalidKeyException, IOException {
-        setEvent(directoryOperations.getPathToFile(), encryptedDirectoryOperations.getPathToFile(), Events.EncryptionStarted, encryptionAlgorithm);
+        setEvent(getDirectoryOperations().getPathToFile(),
+                encryptedDirectoryOperations.getPathToFile(),
+                Events.EncryptionStarted,
+                getEncryptionAlgorithm());
+
         for (FileEncryptor fileEncryptor : fileEncryptorList){
             fileEncryptor.encryptFile(true);
         }
-        setEvent(directoryOperations.getPathToFile(), encryptedDirectoryOperations.getPathToFile(), Events.EncryptionEnded, encryptionAlgorithm);
+        setEvent(getDirectoryOperations().getPathToFile(),
+                encryptedDirectoryOperations.getPathToFile(),
+                Events.EncryptionEnded,
+                getEncryptionAlgorithm());
     }
 
     @Override
     public void decryptDirectory() throws IOException {
-        setEvent(encryptedDirectoryOperations.getPathToFile(), decryptedDirectoryOperations.getPathToFile(), Events.DecryptionStarted, encryptionAlgorithm);
+        setEvent(encryptedDirectoryOperations.getPathToFile(),
+                decryptedDirectoryOperations.getPathToFile(),
+                Events.DecryptionStarted,
+                getEncryptionAlgorithm());
+
         for (FileEncryptor fileEncryptor : fileEncryptorList){
             fileEncryptor.decryptFile();
         }
-        setEvent(encryptedDirectoryOperations.getPathToFile(), decryptedDirectoryOperations.getPathToFile(), Events.DecryptionEnded, encryptionAlgorithm);
+        setEvent(encryptedDirectoryOperations.getPathToFile(),
+                decryptedDirectoryOperations.getPathToFile(),
+                Events.DecryptionEnded,
+                getEncryptionAlgorithm());
     }
 
 }

@@ -1,7 +1,10 @@
+import JsonJAXB.JsonReader;
 import Utils.FileOperations;
-import org.junit.BeforeClass;
+import org.json.simple.parser.ParseException;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+
+import java.io.IOException;
 
 
 @RunWith(Suite.class)
@@ -14,7 +17,20 @@ import org.junit.runners.Suite;
 
 })
 public class TestAll {
-    final static String pathToFile = "C:\\Users\\ofeko\\IdeaProjects\\EncryptionProject\\src\\main\\resources\\Hi.txt";
+
+    static JsonReader jsonReader = new JsonReader("C:\\Users\\ofeko\\IdeaProjects\\EncryptionProject\\src\\main\\resources\\JsonParameters.json");
+    static String pathToFile;
+
+    static {
+        try {
+            jsonReader.readJson();
+            pathToFile = jsonReader.getPathToFile();
+        } catch (ParseException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //    final static String pathToFile = "C:\\Users\\ofeko\\IdeaProjects\\EncryptionProject\\src\\main\\resources\\Hi.txt";
     private static final FileOperations fileOperations = new FileOperations(pathToFile);
 
     public static String getPathToFile() {
