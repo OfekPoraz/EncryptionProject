@@ -1,3 +1,5 @@
+package RegularTesting;
+
 import EncryptionAlgorithms.DoubleEncryption;
 import EncryptionAlgorithms.ShiftMultiplyEncryption;
 import EncryptionAlgorithms.ShiftUpEncryption;

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<InputParamJaxb nameOfEncryption="ShiftUp">
+    <pathToFile>C:\\Users\\ofeko\\IdeaProjects\\EncryptionProject\\src\\main\\resources\\Hi.txt</pathToFile>
+    <pathToDir>C:\\Users\\ofeko\\IdeaProjects\\EncryptionProject\\src\\main\\resources</pathToDir>
+    <testing>testing</testing>
+</InputParamJaxb>

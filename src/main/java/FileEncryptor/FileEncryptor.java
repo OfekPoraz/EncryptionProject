@@ -93,12 +93,16 @@ public class FileEncryptor extends Observable implements Comparable<FileEncrypto
         decryptedFile.writeToFile(decryptedData);
     }
 
-    public String getPathToDecryptedFile(){
+    public String getPathToDecryptedFile() {
         return this.decryptedFile.getPathToFile();
     }
 
-    public String getClearName(String name){
+    public String getClearName(String name) {
         return name.replaceFirst("[.][^.]+$", "");
+    }
+
+    public String getNameOfAlgorithm() {
+        return nameOfAlgorithm;
     }
 
     public void setEvent(String originalPath, String outputFile, Events event){

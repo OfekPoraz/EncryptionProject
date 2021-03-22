@@ -1,8 +1,10 @@
-import EncryptionAlgorithms.RepeatEncryption;
-import EncryptionAlgorithms.ShiftMultiplyEncryption;
+package RegularTesting;
+
+import EncryptionAlgorithms.ShiftUpEncryption;
 import EventsLogger.EncryptionLogger;
 import FileEncryptor.FileEncryptor;
 import Utils.FileOperations;
+
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -11,23 +13,22 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class RepeatEncryptionTest extends abstractTestClass{
+public class ShiftUpTest extends abstractTestClass {
 
     private static FileEncryptor fileEncryptor;
 
     @BeforeClass
     public static void before(){
         try {
-            fileEncryptor = new FileEncryptor(new RepeatEncryption(new ShiftMultiplyEncryption(), 3), getOriginalPath());
+            fileEncryptor = new FileEncryptor(new ShiftUpEncryption(), getOriginalPath());
             fileEncryptor.addObserver(new EncryptionLogger(fileEncryptor));
-        } catch (IOException e) {
+        } catch (IOException e){
             e.printStackTrace();
         }
     }
 
-
     @Test
-    public void Test() {
+    public void Test(){
         try {
             fileEncryptor.encryptFile(false);
             fileEncryptor.decryptFile();
@@ -35,6 +36,7 @@ public class RepeatEncryptionTest extends abstractTestClass{
 
             boolean equals = getFileOperations().compareFilesByString(getOriginalPath(), decryptedFile);
             assertTrue(equals);
+
         } catch (Exception e){
             fail();
         }
@@ -42,22 +44,21 @@ public class RepeatEncryptionTest extends abstractTestClass{
 
     @Test(expected = FileNotFoundException.class)
     public void FileNotFoundTest() throws FileNotFoundException {
-        String OGPath = "C:\\Users\\ofeko\\IdeaProjects\\EncryptionProject\\resources\\Hi.txt";
-        FileOperations fileOperations = new FileOperations(OGPath);
-        String string = fileOperations.readFromFile();
+            String OGPath = "C:\\Users\\ofeko\\IdeaProjects\\EncryptionProject\\resources\\Hi.txt";
+            FileOperations fileOperations = new FileOperations(OGPath);
+            String string = fileOperations.readFromFile();
 
     }
 
     @Test(expected = IOException.class)
     public void IOExceptionTest() throws IOException {
         String OGPath = "C:\\ertyui";
-        FileEncryptor fileEncryptor = new FileEncryptor(new RepeatEncryption(new ShiftMultiplyEncryption(), 3), OGPath);
+        FileEncryptor fileEncryptor = new FileEncryptor(new ShiftUpEncryption(), OGPath);
+
     }
 
     @Test(expected = NullPointerException.class)
     public void NullPointerExceptionTest() throws IOException {
-        FileEncryptor fileEncryptor = new FileEncryptor(new RepeatEncryption(new ShiftMultiplyEncryption(), 3), null);
+        FileEncryptor fileEncryptor = new FileEncryptor(new ShiftUpEncryption(), null);
     }
-
-
 }

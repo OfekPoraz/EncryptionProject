@@ -1,8 +1,9 @@
-import EncryptionAlgorithms.ShiftMultiplyEncryption;
+package RegularTesting;
+
+import EncryptionAlgorithms.XorEncryption;
 import EventsLogger.EncryptionLogger;
 import FileEncryptor.FileEncryptor;
 import Utils.FileOperations;
-
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -11,19 +12,20 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class ShiftMultiplyTest extends abstractTestClass {
+public class XorEncryptionTest extends abstractTestClass {
 
     private static FileEncryptor fileEncryptor;
 
     @BeforeClass
     public static void before(){
         try {
-            fileEncryptor = new FileEncryptor(new ShiftMultiplyEncryption(), getOriginalPath());
+            fileEncryptor = new FileEncryptor(new XorEncryption(), getOriginalPath());
             fileEncryptor.addObserver(new EncryptionLogger(fileEncryptor));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     @Test
     public void Test() {
@@ -34,7 +36,6 @@ public class ShiftMultiplyTest extends abstractTestClass {
 
             boolean equals = getFileOperations().compareFilesByString(getOriginalPath(), decryptedFile);
             assertTrue(equals);
-
         } catch (Exception e){
             fail();
         }
@@ -50,13 +51,15 @@ public class ShiftMultiplyTest extends abstractTestClass {
     @Test(expected = IOException.class)
     public void IOExceptionTest() throws IOException {
         String OGPath = "C:\\ertyui";
-        FileEncryptor fileEncryptor = new FileEncryptor(new ShiftMultiplyEncryption(), OGPath);
+        FileEncryptor fileEncryptor = new FileEncryptor(new XorEncryption(), OGPath);
+
     }
 
     @Test(expected = NullPointerException.class)
     public void NullPointerExceptionTest() throws IOException {
-        FileEncryptor fileEncryptor = new FileEncryptor(new ShiftMultiplyEncryption(), null);
-
+        FileEncryptor fileEncryptor = new FileEncryptor(new XorEncryption(), null);
     }
+
+
 
 }

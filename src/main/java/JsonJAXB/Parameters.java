@@ -1,62 +1,39 @@
 package JsonJAXB;
 
-public class Parameters {
-    private static String pathToFileOrDir;
-    private static String nameOfEncryption;
-    private static String testResult;
-    private static String IOExceptionTestResult;
-    private static String FileNotFoundTestResult;
-    private static String NullPointerExceptionTestResult;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
+public class Parameters {
+    @XmlElement
+    private String pathToFileOrDir;
+    @XmlElement
+    private String nameOfEncryption;
+    @XmlElement
+    private String testResult;
+    @XmlElement
+    private String IOExceptionTestResult;
+    @XmlElement
+    private String FileNotFoundTestResult;
+    @XmlElement
+    private String NullPointerExceptionTestResult;
 
     public Parameters() {
     }
 
-    public static String getPathToFileOrDir() {
-        return pathToFileOrDir;
-    }
-
-    public static void setPathToFileOrDir(String pathToFileOrDir) {
-        Parameters.pathToFileOrDir = pathToFileOrDir;
-    }
-
-    public static String getNameOfEncryption() {
-        return nameOfEncryption;
-    }
-
-    public static void setNameOfEncryption(String nameOfEncryption) {
-        Parameters.nameOfEncryption = nameOfEncryption;
-    }
-
-    public static String getTestResult() {
-        return testResult;
-    }
-
-    public static void setTestResult(String testResult) {
-        Parameters.testResult = testResult;
-    }
-
-    public static String getIOExceptionTestResult() {
-        return IOExceptionTestResult;
-    }
-
-    public static void setIOExceptionTestResult(String IOExceptionTestResult) {
-        Parameters.IOExceptionTestResult = IOExceptionTestResult;
-    }
-
-    public static String getFileNotFoundTestResult() {
-        return FileNotFoundTestResult;
-    }
-
-    public static void setFileNotFoundTestResult(String fileNotFoundTestResult) {
+    public Parameters(String pathToFileOrDir,
+                      String nameOfEncryption,
+                      String testResult,
+                      String IOExceptionTestResult,
+                      String fileNotFoundTestResult,
+                      String nullPointerExceptionTestResult) {
+        super();
+        this.pathToFileOrDir = pathToFileOrDir;
+        this.nameOfEncryption = nameOfEncryption;
+        this.testResult = testResult;
+        this.IOExceptionTestResult = IOExceptionTestResult;
         FileNotFoundTestResult = fileNotFoundTestResult;
-    }
-
-    public static String getNullPointerExceptionTestResult() {
-        return NullPointerExceptionTestResult;
-    }
-
-    public static void setNullPointerExceptionTestResult(String nullPointerExceptionTestResult) {
         NullPointerExceptionTestResult = nullPointerExceptionTestResult;
     }
+
 }
