@@ -1,0 +1,16 @@
+<?xml version = "1.0"?>
+
+<xs:schema xmlns:xs = "http://www.w3.org/2001/XMLSchema">
+    <xs:element name = 'parameters'>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name = "pathToFileOrDir" type = "xs:string"/>
+                <xs:element name = "nameOfEncryption" type = "xs:string"/>
+                <xs:element name = "testResult" type = "xs:string"/>
+                <xs:element name = "ioExceptionTestResult" type = "xs:string"/>
+                <xs:element name = "fileNotFoundTestResult" type = "xs:string"/>
+                <xs:element name = "nullPointerExceptionTestResult" type = "xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

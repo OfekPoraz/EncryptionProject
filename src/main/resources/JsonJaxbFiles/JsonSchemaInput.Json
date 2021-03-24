@@ -1,0 +1,18 @@
+{
+  "$Schema": "http://json-schema.org/draft-07/schema",
+  "title": "Parameters",
+  "type" : "object",
+  "properties" : {
+    "pathToFile" : {
+      "type" : "string"
+    },
+    "pathToDir" : {
+      "type" : "string"
+    },
+    "nameOfEncryption" : {
+      "type" : "string"
+    }
+  },
+  "additionalProperties": false,
+  "required": ["pathToFile", "pathToDir", "nameOfEncryption"]
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<parameters>
+    <pathToFileOrDir>C:\\Users\\ofeko\\IdeaProjects\\EncryptionProject\\src\\main\\resources\\Hi.txt</pathToFileOrDir>
+    <nameOfEncryption>ShiftUp</nameOfEncryption>
+    <testResult>True</testResult>
+    <IOExceptionTestResult>True</IOExceptionTestResult>
+    <FileNotFoundTestResult>True</FileNotFoundTestResult>
+    <NullPointerExceptionTestResult>True</NullPointerExceptionTestResult>
+    <TestMore>testing</TestMore>
+</parameters>
