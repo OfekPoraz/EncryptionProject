@@ -3,26 +3,26 @@
   "title": "Parameters",
   "type" : "object",
   "properties" : {
-      "pathToFileOrDir" : {
-        "type" : "string"
-      },
-      "nameOfEncryption" : {
-        "type" : "string"
-      },
-      "testResult" : {
-        "type" : "string"
-      },
-      "IOExceptionTestResult" : {
-        "type" : "string"
-      },
-      "FileNotFoundTestResult" : {
-        "type" : "string"
-      },
-      "NullPointerExceptionTestResult" : {
-        "type" : "string"
-      }
+    "pathToFileOrDir" : {
+      "type" : "string"
+    },
+    "nameOfEncryption" : {
+      "type" : "string"
+    },
+    "testResult" : {
+      "type" : "string"
+    },
+    "ioExceptionTestResult" : {
+      "type" : "string"
+    },
+    "fileNotFoundTestResult" : {
+      "type" : "string"
+    },
+    "nullPointerExceptionTestResult" : {
+      "type" : "string"
+    }
   },
   "additionalProperties": false,
-  "required": ["pathToFileOrDir", "nameOfEncryption", "testResult", "IOExceptionTestResult",
-    "FileNotFoundTestResult", "NullPointerExceptionTestResult"]
+  "required": ["pathToFileOrDir", "nameOfEncryption", "testResult", "ioExceptionTestResult",
+    "fileNotFoundTestResult", "nullPointerExceptionTestResult"]
 }

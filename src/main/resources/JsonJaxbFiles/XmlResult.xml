@@ -3,7 +3,7 @@
     <pathToFileOrDir>C:\\Users\\ofeko\\IdeaProjects\\EncryptionProject\\src\\main\\resources\\Hi.txt</pathToFileOrDir>
     <nameOfEncryption>ShiftUp</nameOfEncryption>
     <testResult>True</testResult>
-    <IOExceptionTestResult>True</IOExceptionTestResult>
-    <FileNotFoundTestResult>True</FileNotFoundTestResult>
-    <NullPointerExceptionTestResult>True</NullPointerExceptionTestResult>
+    <ioExceptionTestResult>True</ioExceptionTestResult>
+    <fileNotFoundTestResult>True</fileNotFoundTestResult>
+    <nullPointerExceptionTestResult>True</nullPointerExceptionTestResult>
 </parameters>
